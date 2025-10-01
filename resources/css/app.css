@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+.font-allura { font-family: 'Allura', cursive; }
+.font-montserrat { font-family: 'Montserrat', sans-serif; }
