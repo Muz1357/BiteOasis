@@ -59,16 +59,10 @@ return [
             ]) : [],
         ],
 
-        'ProductFinderDB' => [
+        'mongodb' => [
             'driver'   => 'mongodb',
-            'host'     => env('MONGO_DB_HOST', '127.0.0.1'),
-            'port'     => env('MONGO_DB_PORT', 27017),
+            'dsn'      => env('MONGO_DB_DSN'),
             'database' => env('MONGO_DB_DATABASE', 'BiteOasis'),
-            'username' => env('MONGO_DB_USERNAME', 'admin'), 
-            'password' => env('MONGO_DB_PASSWORD', 'y1F5Oqmef7LwKaoy'), 
-            'options'  => [
-                'database' => env('MONGO_DB_AUTHENTICATION_DATABASE', 'admin')
-            ],
         ],
 
 

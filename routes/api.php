@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Http\Controllers\Api\ReviewController;
+
 
 Route::middleware('auth:sanctum')->get('/me', 
 function (Request $request){
@@ -57,3 +59,10 @@ function (Request $request){
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::prefix('v1')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::apiResource('reviews', ReviewController::class);
+        Route::get('reviews/product/{productId}/stats', [ReviewController::class, 'statsByProduct']);
+    });
+});

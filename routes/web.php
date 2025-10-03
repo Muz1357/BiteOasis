@@ -11,6 +11,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ApiProductController;
 use App\Http\Controllers\OfferController;
 
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Offer;
 
 // Public routes
@@ -90,8 +92,7 @@ Route::post('/logout', function(Request $request) {
     return redirect('/login');
 })->name('logout');
 
-Route::get('/mongo-products', [ApiProductController::class, 'index']);      
-Route::post('/mongo-products', [ApiProductController::class, 'store']); 
+
 
 Route::get('/offers', function(){
     $offers = Offer::with('product')->get();
