@@ -49,34 +49,36 @@ Route::middleware(['auth'])->group(function (){
     Route::get('/orders', [UserOrderController::class, 'displayO'])->name('orders.displayO');
 });
 
-//Admin routes
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    Route::get('/', function() {
-        return view('admin.index');
-    })->name('admin.dashboard');
+// Admin routes
+Route::middleware(['auth', 'can:access-admin-dashboard'])
+    ->prefix('admin')
+    ->group(function () {
 
-    //Admin products
-    Route::get('/products', [AdminProductController::class, 'showP'])->name('admin.products.showP');
-    Route::get('/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
-    Route::post('/products', [AdminProductController::class, 'store'])->name('admin.products.store');
-    Route::get('/products/{id}/edit', [AdminProductController::class, 'edit'])->name('admin.products.edit');
-    Route::put('/products/{id}', [AdminProductController::class, 'update'])->name('admin.products.update');
-    Route::delete('/products/{id}', [AdminProductController::class, 'destroy'])->name('admin.products.destroy');
+    Route::get('/', fn() => view('admin.index'))->name('admin.dashboard');
 
-    //Admin user management
-    Route::get('/users', [UserController::class, 'showU'])->name('admin.users.showU');
-    Route::get('/users/create', [UserController::class, 'createU'])->name('admin.users.createU');
-    Route::post('/users', [UserController::class, 'store'])->name('admin.users.store');
-    Route::get('/users/{id}/edit', [UserController::class, 'editU'])->name('admin.users.editU');
-    Route::put('/users/{id}', [UserController::class, 'update'])->name('admin.users.update');
-    Route::delete('users/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+    // Products
+    Route::get('/products', [AdminProductController::class, 'showP'])->middleware('can:manage-products')->name('admin.products.showP');
+    Route::get('/products/create', [AdminProductController::class, 'create'])->middleware('can:manage-products')->name('admin.products.create');
+    Route::post('/products', [AdminProductController::class, 'store'])->middleware('can:manage-products')->name('admin.products.store');
+    Route::get('/products/{id}/edit', [AdminProductController::class, 'edit'])->middleware('can:manage-products')->name('admin.products.edit');
+    Route::put('/products/{id}', [AdminProductController::class, 'update'])->middleware('can:manage-products')->name('admin.products.update');
+    Route::delete('/products/{id}', [AdminProductController::class, 'destroy'])->middleware('can:manage-products')->name('admin.products.destroy');
 
-    //Admin orders
-    Route::get('/orders', [AdminOrderController::class, 'showO'])->name('admin.orders.showO');
-    Route::get('/orders/{id}', [AdminOrderController::class, 'show'])->name('admin.orders.show');
-    Route::put('/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->name('admin.orders.updateStatus');
-    Route::delete('/orders/{id}', [AdminOrderController::class, 'destroy'])->name('admin.orders.destroy');
+    // Users
+    Route::get('/users', [UserController::class, 'showU'])->middleware('can:manage-users')->name('admin.users.showU');
+    Route::get('/users/create', [UserController::class, 'createU'])->middleware('can:manage-users')->name('admin.users.createU');
+    Route::post('/users', [UserController::class, 'store'])->middleware('can:manage-users')->name('admin.users.store');
+    Route::get('/users/{id}/edit', [UserController::class, 'editU'])->middleware('can:manage-users')->name('admin.users.editU');
+    Route::put('/users/{id}', [UserController::class, 'update'])->middleware('can:manage-users')->name('admin.users.update');
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->middleware('can:manage-users')->name('admin.users.destroy');
+
+    // Orders
+    Route::get('/orders', [AdminOrderController::class, 'showO'])->middleware('can:manage-orders')->name('admin.orders.showO');
+    Route::get('/orders/{id}', [AdminOrderController::class, 'show'])->middleware('can:manage-orders')->name('admin.orders.show');
+    Route::put('/orders/{id}/status', [AdminOrderController::class, 'updateStatus'])->middleware('can:manage-orders')->name('admin.orders.updateStatus');
+    Route::delete('/orders/{id}', [AdminOrderController::class, 'destroy'])->middleware('can:manage-orders')->name('admin.orders.destroy');
 });
+
 
 Route::post('/logout', function(Request $request) {
     $user = $request->user();
