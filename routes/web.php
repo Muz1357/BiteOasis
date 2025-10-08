@@ -54,8 +54,6 @@ Route::middleware(['auth', 'can:access-admin-dashboard'])
     ->prefix('admin')
     ->group(function () {
 
-    Route::get('/', fn() => view('admin.index'))->name('admin.dashboard');
-
     // Products
     Route::get('/products', [AdminProductController::class, 'showP'])->middleware('can:manage-products')->name('admin.products.showP');
     Route::get('/products/create', [AdminProductController::class, 'create'])->middleware('can:manage-products')->name('admin.products.create');
@@ -79,7 +77,6 @@ Route::middleware(['auth', 'can:access-admin-dashboard'])
     Route::delete('/orders/{id}', [AdminOrderController::class, 'destroy'])->middleware('can:manage-orders')->name('admin.orders.destroy');
 });
 
-
 Route::post('/logout', function(Request $request) {
     $user = $request->user();
 
@@ -93,8 +90,6 @@ Route::post('/logout', function(Request $request) {
     $request->session()->regenerateToken();
     return redirect('/login');
 })->name('logout');
-
-
 
 Route::get('/offers', function(){
     $offers = Offer::with('product')->get();

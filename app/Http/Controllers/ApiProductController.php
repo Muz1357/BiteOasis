@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product;      // MySQL Product model
-use App\Models\ApiProduct;   // MongoDB Product model
+use App\Models\Product;      
+use App\Models\ApiProduct;   
 
 class ApiProductController extends Controller
 {
